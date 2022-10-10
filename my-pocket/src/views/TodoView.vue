@@ -5,6 +5,7 @@ import Textarea from "../components/utils/Textarea.vue";
 import Checkbox from "../components/utils/Checkbox.vue";
 import Button from "../components/utils/Button.vue";
 import type TodoModel from "@/models/TodoModel";
+import { store } from "@/services/store";
 
 const inputs = reactive({
   title: "",
@@ -22,7 +23,7 @@ const optionCheckboxes = reactive({
 const todos = ref<TodoModel[]>([]);
 
 const add = () => {
-  todos.value.push({
+  const todo = {
     id: Date.now(),
     value: {
       title: inputs.title,
@@ -30,8 +31,14 @@ const add = () => {
       longText: inputs.longText,
       targetTime: inputs.targetTime,
     },
+  };
+  store({
+    key: "todo",
+    value: todo,
   });
-  console.log("added");
+  todos.value.push(todo);
+
+  console.log("added", todos.value);
 };
 </script>
 
