@@ -1,0 +1,22 @@
+.formContainer,
+.optionsContainer,
+.historyContainer {
+  background-color: var(--softWhite);
+  border-radius: var(--borderRadius);
+  padding: 0 10px;
+}
+
+.optionsContainer {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.formGroup {
+  padding: 20px;
+}
+
+.leftContainer,
+.rightContainer {
+  padding: 20px 10px;
+  border-right: var(--softWhite) solid var(--borderWidth);
+}

@@ -5,7 +5,7 @@ interface Props {
   value: string | number;
 }
 
-const { type } = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   type: "text",
 });
 

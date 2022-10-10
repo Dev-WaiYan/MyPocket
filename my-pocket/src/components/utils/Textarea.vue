@@ -16,6 +16,7 @@ const { type } = withDefaults(defineProps<Props>(), {
   <textarea
     :type="type"
     v-model="value"
+    @input="$emit('update:value', ($event.target as HTMLInputElement).value)"
     :placeholder="placeholder"
     :rows="rows"
   ></textarea>

@@ -1,26 +1,31 @@
 <script setup lang="ts">
-import { reactive, ref, type Ref } from "vue";
+import { reactive, ref } from "vue";
 import Input from "../components/utils/Input.vue";
 import Textarea from "../components/utils/Textarea.vue";
 import Checkbox from "../components/utils/Checkbox.vue";
 import Button from "../components/utils/Button.vue";
 import type TodoModel from "@/models/TodoModel";
 import { store } from "@/services/store";
+import History from "../components/commons/History.vue";
 
-const inputs = reactive({
+const defaultInputs = {
   title: "",
   shortText: "",
   longText: "",
   targetTime: "",
-});
+};
 
+const inputs = reactive({ ...defaultInputs });
 const optionCheckboxes = reactive({
   title: false,
   shortText: false,
   longText: false,
 });
-
 const todos = ref<TodoModel[]>([]);
+
+const clearInputs = () => {
+  Object.assign(inputs, defaultInputs);
+};
 
 const add = () => {
   const todo = {
@@ -37,6 +42,7 @@ const add = () => {
     value: todo,
   });
   todos.value.push(todo);
+  clearInputs();
 
   console.log("added", todos.value);
 };
@@ -81,7 +87,10 @@ const add = () => {
             </div>
 
             <div class="col-12 formGroup">
-              <Textarea :value="inputs.longText" placeholder="Long Text" />
+              <Textarea
+                v-model:value="inputs.longText"
+                placeholder="Long Text"
+              />
             </div>
 
             <div class="col-12 formGroup">
@@ -100,88 +109,9 @@ const add = () => {
       </div>
     </div>
     <div class="col-sm-4 rightContainer">
-      <div class="mb-2">
-        <h3>History Filter</h3>
-        <div class="optionsContainer">
-          <Checkbox
-            id="title"
-            label="Title"
-            :checked="optionCheckboxes.title"
-          />
-          <Checkbox
-            id="shortText"
-            label="Short Text"
-            :checked="optionCheckboxes.shortText"
-          />
-          <Checkbox
-            id="longText"
-            label="Long Text"
-            :checked="optionCheckboxes.longText"
-          />
-        </div>
-      </div>
-      <div class="mb-2">
-        <div class="historyContainer">
-          <div v-for="todo in todos" class="historyCard">
-            <div>{{ todo.value.title }}</div>
-            <div class="historyStatus">P</div>
-          </div>
-        </div>
-      </div>
+      <History :items="todos" />
     </div>
   </div>
 </template>
 
-<style scoped>
-.formContainer,
-.optionsContainer,
-.historyContainer {
-  background-color: var(--softWhite);
-  border-radius: var(--borderRadius);
-  padding: 0 10px;
-}
-
-.optionsContainer {
-  display: flex;
-  margin-bottom: 20px;
-}
-
-.historyContainer {
-  min-height: 70vh;
-  padding: 20px;
-}
-
-.historyCard {
-  border: solid var(--borderWidth);
-  border-radius: var(--borderRadius);
-  padding: 5px 15px;
-  margin: 10px 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 1px 1px 2px var(--dark);
-}
-
-.historyStatus {
-  background-color: var(--danger);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.7rem;
-  box-shadow: 1px 1px 2px var(--dark);
-  font-weight: bold;
-}
-
-.formGroup {
-  padding: 20px;
-}
-
-.leftContainer,
-.rightContainer {
-  padding: 20px 10px;
-  border-right: var(--softWhite) solid var(--borderWidth);
-}
-</style>
+<style scoped></style>

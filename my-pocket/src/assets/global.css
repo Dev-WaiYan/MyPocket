@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap");
+@import url("./utils.css");
 
 :root {
   --light-primaryColor: linear-gradient(
