@@ -1,0 +1,50 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap");
+
+:root {
+  --light-primaryColor: linear-gradient(
+    142.08deg,
+    #81dce2 21.9%,
+    rgba(144, 216, 100, 0) 105.29%
+  );
+  --light-secondaryColor: linear-gradient(
+    174.14deg,
+    #4e9ea4 -32.21%,
+    rgba(78, 158, 164, 0) 95.34%
+  );
+  --light-textColor: #2f2c2c;
+  --dark: #2a2828;
+  --softWhite: #fafafa;
+  --danger: #ff6e6e;
+  --borderRadius: 7px;
+  --borderWidth: 1px;
+  --fontFamily: "Roboto Condensed", sans-serif;
+  --fontSize: 16px;
+}
+
+html,
+body {
+  font-size: var(--fontSize);
+  color: var(--light-textColor);
+  background-image: var(--light-primaryColor);
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  font-family: var(--fontFamily);
+}
+
+a {
+  text-decoration: none;
+  color: var(--light-textColor);
+}
+
+a:hover {
+  color: var(--light-softWhite);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--fontSize);
+}
