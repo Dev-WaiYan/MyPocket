@@ -1,64 +1,67 @@
-import STORAGE from "@/constants/storage";
+import type TodoModel from "@/models/TodoModel";
+import { getData, storeData } from "@/utils/store";
 
-interface StoreData {
-  key: string;
-  value: string | number | Object;
-}
-
-export const store = (data: StoreData) => {
-  return storeData({ data });
+export const retrieveAll = (key: string) => {
+  return getData<TodoModel[]>({ key });
 };
 
-export const storeData = ({
-  storageType = STORAGE.LOCAL,
-  data,
-}: {
-  storageType?: STORAGE;
-  data: StoreData;
-}) => {
-  const { key } = data;
-  const existingData = getData({ key: key });
+export const retrieveOne = (key: string, id: number) => {
+  const datas = getData<TodoModel[]>({ key });
+  return datas.find((d: TodoModel) => d.id === id);
+};
 
-  let value: any = JSON.stringify([data.value]);
+export const store = (key: string, data: TodoModel) => {
+  const existingData = retrieveAll(key);
+
+  let value = [data];
 
   if (existingData) {
     if (Array.isArray(existingData)) {
-      value = JSON.stringify([...existingData, data.value]);
+      value = [...existingData, data];
     }
   }
+  storeData({ key, value });
 
-  switch (storageType) {
-    case STORAGE.LOCAL:
-      localStorage.setItem(key, value);
-      break;
-
-    default:
-      localStorage.setItem(key, value);
-  }
-
-  return { added: data.value, result: JSON.parse(value) };
+  return value;
 };
 
-export const getData = ({
-  storageType = STORAGE.LOCAL,
-  key,
-}: {
-  storageType?: STORAGE;
-  key: string;
-}) => {
-  let value: string | null;
-  let existingData: number | string | Object;
+export const removeOne = (key: string, id: number) => {
+  const existingData = retrieveAll(key);
+  let value: TodoModel[] = [];
 
-  switch (storageType) {
-    case STORAGE.LOCAL:
-      value = localStorage.getItem(key);
-      break;
-
-    default:
-      value = localStorage.getItem(key);
+  if (existingData) {
+    if (Array.isArray(existingData)) {
+      value = existingData.filter((data: TodoModel) => data.id !== id);
+      storeData({
+        key,
+        value,
+      });
+    }
   }
+  return value;
+};
 
-  existingData = value ? JSON.parse(value) : null;
+export const removeAll = (key: string) => {
+  const value: [] = [];
+  storeData({
+    key,
+    value,
+  });
 
-  return existingData;
+  return value;
+};
+
+export const update = (key: string, data: TodoModel) => {
+  const existingData: TodoModel[] = retrieveAll(key);
+
+  const value: TodoModel[] = existingData.map((d) => {
+    if (d.id === data.id) {
+      return data;
+    }
+    return d;
+  });
+
+  storeData({ key, value });
+
+  return value;
 };

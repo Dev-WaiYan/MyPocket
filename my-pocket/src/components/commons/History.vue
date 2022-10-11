@@ -1,9 +1,14 @@
 <script setup lang="ts">
+import type TodoModel from "@/models/TodoModel";
 import { reactive } from "vue";
-import Checkbox from "../utils/Checkbox.vue";
+import Checkbox from "@/components/utils/Checkbox.vue";
 
 interface Props {
-  items: any;
+  items: TodoModel[];
+
+  editCb: (item: TodoModel) => void;
+  deleteCb: (item: TodoModel) => void;
+  deleteAllCb: () => void;
 }
 
 const optionCheckboxes = reactive({
@@ -12,8 +17,9 @@ const optionCheckboxes = reactive({
   coming: false,
 });
 
-withDefaults(defineProps<Props>(), { items: [] });
+const { items, editCb, deleteCb, deleteAllCb } = defineProps<Props>();
 
+// Start - utils
 const onHoverHistoryCard = (id: number) => {
   const editableContainers: any =
     document.getElementsByClassName("editableContainer");
@@ -25,6 +31,19 @@ const onHoverHistoryCard = (id: number) => {
     editableContainer.style.display = "flex";
   }
 };
+
+const edit = (item: TodoModel) => {
+  editCb(item);
+};
+
+const remove = (item: TodoModel) => {
+  deleteCb(item);
+};
+
+const removeAll = () => {
+  deleteAllCb();
+};
+// End - utils
 </script>
 
 <template>
@@ -42,9 +61,12 @@ const onHoverHistoryCard = (id: number) => {
   </div>
   <div class="mb-2">
     <div class="historyContainer">
+      <div class="action" @click="removeAll()" v-show="items.length > 0">
+        Clear All
+      </div>
       <div class="historyCardContainer" :key="item.id" v-for="item in items">
         <div class="editableContainer" :id="`editable_${item.id}`">
-          <u>Edit</u><u>Delete</u>
+          <u @click="edit(item)">Edit</u><u @click="remove(item)">Delete</u>
         </div>
         <div class="historyCard" @mouseover="onHoverHistoryCard(item.id)">
           <div>{{ item.value.title }}</div>
@@ -58,6 +80,8 @@ const onHoverHistoryCard = (id: number) => {
 <style scoped>
 .historyContainer {
   min-height: 70vh;
+  max-height: 100vh;
+  overflow: auto;
   padding: 20px;
 }
 
@@ -96,6 +120,12 @@ const onHoverHistoryCard = (id: number) => {
 
 .editableContainer u {
   margin-left: 20px;
+  cursor: pointer;
+}
+
+.action {
+  text-decoration: underline;
+  text-align: end;
   cursor: pointer;
 }
 </style>
