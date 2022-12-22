@@ -5,14 +5,19 @@ interface Props {
   label: string;
 }
 
-withDefaults(defineProps<Props>(), {
-  checked: false,
-});
+defineProps<Props>();
+
+defineEmits(["update:checked"]);
 </script>
 
 <template>
   <div class="d-flex align-items-center">
-    <input type="checkbox" :id="id" v-model="checked" />
+    <input
+      type="checkbox"
+      :id="id"
+      @change="$emit('update:checked', !checked)"
+      v-model="checked"
+    />
     <label :for="id">{{ label }}</label>
   </div>
 </template>

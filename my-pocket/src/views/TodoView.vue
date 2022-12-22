@@ -27,9 +27,9 @@ const editState = reactive<{ isOn: boolean; item: TodoModel | null }>({
 });
 const inputs = reactive({ ...defaultInputs });
 const optionCheckboxes = reactive({
-  title: false,
-  shortText: false,
-  longText: false,
+  title: true,
+  shortText: true,
+  longText: true,
 });
 const todos = ref<TodoModel[]>([]);
 
@@ -104,21 +104,22 @@ const confirmEdit = () => {
       <div class="container">
         <div class="pb-2">
           <h3>Options</h3>
+          {{ optionCheckboxes }}
           <div class="optionsContainer">
             <Checkbox
               id="title"
               label="Title"
-              :checked="optionCheckboxes.title"
+              v-model:checked="optionCheckboxes.title"
             />
             <Checkbox
               id="shortText"
               label="Short Text"
-              :checked="optionCheckboxes.shortText"
+              v-model:checked="optionCheckboxes.shortText"
             />
             <Checkbox
               id="longText"
               label="Long Text"
-              :checked="optionCheckboxes.longText"
+              v-model:checked="optionCheckboxes.longText"
             />
           </div>
         </div>
